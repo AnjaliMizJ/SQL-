@@ -17,9 +17,45 @@ menu
 members
 For complete dataset refer to the link: https://8weeksqlchallenge.com/case-study-1/
 
-**1. What is the total amount each customer spent at the restaurant?**
+**1. What is the total amount each customer spent at the restaurant?** we will use aggregate sum function to get the total spent amount and groupby customer_id to get sum of amount for each customer and then join as price is another table of menu.
+	
+**solution:**      
+		
+  			SELECT sales.customer_id AS Customer, SUM(menu.price) AS Total_Spent
+            		FROM dannys_diner.sales sales 
+            		JOIN dannys_diner.menu menu ON sales.product_id = menu.product_id
+          	   GROUP BY sales.customer_id
 
-		      SELECT sales.customer_id AS Customer, SUM(menu.price) AS Total_Spent
-            FROM dannys_diner.sales sales 
-            JOIN dannys_diner.menu menu ON sales.product_id = menu.product_id
-          GROUP BY sales.customer_id
+**2. How many days has each customer visited the restaurant?** we will use aggregate count function and wrapped with distinct to get unique day to avoud repetetion and group by customer_id to get count of days visited by each customer.
+
+**solution**
+		
+  		SELECT customer_id AS CUSTOMER, COUNT(DISTINCT(order_date))
+       		 FROM dannys_diner.sales
+        	GROUP BY customer_id
+
+**3. What was the first item from the menu purchased by each customer?**
+
+**solution:**
+		
+  		WITH RANK_PRODUCT_CTE AS
+       		 (SELECT customer_id, order_date, product_name, 
+        		DENSE_RANK() OVER(PARTITION BY sales.customer_id ORDER BY sales.order_date) AS 			rank
+        	FROM dannys_diner.sales sales 
+        	JOIN dannys_diner.menu menu ON sales.product_id=menu.product_id
+       		)
+        
+        	SELECT customer_id, product_name
+        	FROM RANK_PRODUCT_CTE
+        	WHERE rank = 1
+        	GROUP BY customer_id, product_name
+
+**4. What is the most purchased item on the menu and how many times was it purchased by all customers?**
+
+**solution:**	
+
+			SELECT menu.product_name, COUNT(sales.product_id) AS p_count
+    			FROM dannys_diner.sales sales 
+    			JOIN dannys_diner.menu menu ON sales.product_id=menu.product_id
+    		GROUP BY sales.product_id,  menu.product_name
+    		ORDER BY p_count DESC LIMIT 1
