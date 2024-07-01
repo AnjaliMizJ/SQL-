@@ -59,3 +59,19 @@ For complete dataset refer to the link: https://8weeksqlchallenge.com/case-study
     			JOIN dannys_diner.menu menu ON sales.product_id=menu.product_id
     		GROUP BY sales.product_id,  menu.product_name
     		ORDER BY p_count DESC LIMIT 1
+
+
+**5. Which item was the most popular for each customer?**
+**solution***
+
+		WITH  CTErank_fav_food AS
+			(SELECT sales.customer_id AS customer, COUNT(sales.product_id) AS prod_id, menu.product_name AS prod_name, 
+     			RANK() OVER(PARTITION BY sales.customer_id ORDER BY COUNT(sales.product_id) 		DESC) AS 	rank1
+    			FROM dannys_diner.sales sales
+    			JOIN dannys_diner.menu menu ON sales.product_id=menu.product_id
+    			GROUP BY sales.customer_id,  menu.product_name)
+    
+    	
+    		SELECT customer, prod_id, prod_name, rank1
+    		FROM CTErank_fav_food
+    		WHERE rank1=1
