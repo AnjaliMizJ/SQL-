@@ -114,3 +114,16 @@ For complete dataset refer to the link: https://8weeksqlchallenge.com/case-study
      			ON s.product_id = menu.product_id
      		WHERE rank1 = 1
      		ORDER BY s.customer_id
+
+**8. What is the total items and amount spent for each member before they became a member?**
+
+**solution**
+
+		SELECT sales.customer_id, COUNT( DISTINCT sales.product_id), SUM(menu.price)
+    		FROM dannys_diner.sales sales
+     			JOIN dannys_diner.menu menu
+     			ON sales.product_id = menu.product_id
+     				JOIN dannys_diner.members members
+     				ON sales.customer_id = members.customer_id
+     		WHERE sales.order_date < members.join_date
+     		GROUP BY sales.customer_id
