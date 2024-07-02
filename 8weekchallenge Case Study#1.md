@@ -75,3 +75,42 @@ For complete dataset refer to the link: https://8weeksqlchallenge.com/case-study
     		SELECT customer, prod_id, prod_name, rank1
     		FROM CTErank_fav_food
     		WHERE rank1=1
+
+**6. Which item was purchased first by the customer after they became a member?**
+
+**solution**
+
+		WITH firstCTEproduct AS
+    		(SELECT sales.customer_id, sales.order_date, sales.product_id, members.join_date, DENSE_RANK() OVER(PARTITION BY sales.product_id ORDER BY 				sales.order_date) AS rank1
+     			FROM dannys_diner.sales sales
+     				JOIN dannys_diner.members members
+     				ON sales.customer_id = members.customer_id
+	     		WHERE sales.order_date >= members.join_date
+     			)
+     
+     		SELECT s.customer_id, s.order_date, s.product_id
+     			FROM firstCTEproduct s
+     				JOIN dannys_diner.menu menu
+     				ON s.product_id = menu.product_id
+     			WHERE rank1 = 1
+     
+
+**7. Which item was purchased just before the customer became a member?**
+
+**solution:**
+
+		
+  		WITH beforeCTEproduct AS
+    		(SELECT sales.customer_id, sales.order_date, sales.product_id, members.join_date, DENSE_RANK() OVER(PARTITION BY sales.product_id ORDER BY 				sales.order_date) AS rank1
+     		FROM dannys_diner.sales sales
+     			JOIN dannys_diner.members members
+     			ON sales.customer_id = members.customer_id
+     		WHERE sales.order_date < members.join_date
+     		)
+     
+     		SELECT s.customer_id, s.order_date, menu.product_name
+     		FROM beforeCTEproduct s
+     			JOIN dannys_diner.menu menu
+     			ON s.product_id = menu.product_id
+     		WHERE rank1 = 1
+     		ORDER BY s.customer_id
