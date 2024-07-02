@@ -127,3 +127,17 @@ For complete dataset refer to the link: https://8weeksqlchallenge.com/case-study
      				ON sales.customer_id = members.customer_id
      		WHERE sales.order_date < members.join_date
      		GROUP BY sales.customer_id
+
+**9.  If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?**
+**SOLUTION**
+
+		SELECT sales.customer_id, 
+    		SUM(CASE 
+        		WHEN menu.product_name = 'sushi' THEN menu.price*10*2
+            		ELSE menu.price*10
+        		END) AS points
+     		FROM dannys_diner.sales sales
+     			JOIN dannys_diner.menu menu
+     			ON sales.product_id = menu.product_id
+     		GROUP BY sales.customer_id
+     
