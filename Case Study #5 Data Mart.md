@@ -3,7 +3,7 @@
 ***Case Study Questions**
 The following case study questions require some data cleaning steps before we start to unpack Danny’s key business questions in more depth.
 
-1. Data Cleansing Steps
+**1. Data Cleansing Steps**
 In a single query, perform the following operations and generate a new table in the data_mart schema named clean_weekly_sales:
 
 Convert the week_date to a DATE format
@@ -28,25 +28,88 @@ Ensure all null string values with an "unknown" string value in the original seg
 
 Generate a new avg_transaction column as the sales value divided by transactions rounded to 2 decimal places for each record
 
-    SELECT TO_DATE( week_date,'YY/MM/DD') as week_datA, 
-          EXTRACT(WEEK FROM TO_DATE( week_date,'YY-MM-DD')) AS WEEK_NUM,
-          EXTRACT(MONTH FROM TO_DATE( week_date,'YY-MM-DD')) AS MONTH_NUM,
-          EXTRACT(YEAR FROM TO_DATE( week_date,'YY-MM-DD')) AS CALENAR_YEAR,
-          (CASE WHEN segment=NULL THEN 'unknown'
- 		                ELSE segment
- 		        END) AS segment,
-          (CASE 
- 		            WHEN RIGHT(segment,1)='1' THEN 'Young Adults' 
-		            WHEN RIGHT(segment,1)='2' THEN 'Middle Aged' 
-                WHEN RIGHT(segment,1) in ('3','4') THEN 'Retirees' 
-                ELSE 'unknown'
-            END) AS age_band,
-          (CASE 
- 		            WHEN LEFT(segment,1)='C' THEN 'couples' 
-		            WHEN LEFT(segment,1)='F' THEN 'families' 
-                ELSE 'unknown'
-                END) AS demographics,
-          ROUND(sales/transactions,2) AS avg_transaction 
+  	drop table if exists clean_weekly_sales;
+	create table clean_weekly_sales
+	(
+		week_date date,
+		week_number int,
+		month_number int,
+		calender_year int,
+		region varchar(50),
+		platform varchar(50),
+		segment varchar(50),
+		age_band varchar(50),
+		demographic varchar(50),
+		transactions int,
+		sales int,
+		avg_transaction float
+		);
 
-        FROM data_mart.weekly_sales
-        LIMIT 10;
+
+	insert into clean_weekly_sales
+	(week_date, week_number, month_number, calender_year, region,
+		platform, segment, age_band, demographic, transactions,sales,avg_transaction
+	)
+	select 
+		TO_DATE( week_date,'YY/MM/DD') as week_date,
+		EXTRACT(WEEK FROM TO_DATE( week_date,'YY-MM-DD')) as  week_number,
+		EXTRACT(MONTH FROM TO_DATE( week_date,'YY-MM-DD'))  as  month_number,
+		EXTRACT(year FROM TO_DATE( week_date,'YY-MM-DD'))  as  calender_year, 
+		region, platform, segment, 
+		case 
+			when right (segment,1) = '1' then 'Young Adults'
+			when right (segment,1) = '2' then 'Middle Aged'
+			when right (segment,1) in ('3','4') then 'Retirees'
+				else 'Unknown' end as age_band,
+		case
+			when left(segment, 1) = 'C' then 'Couples'
+			when left(segment, 1) = 'F' then 'Families'
+				else 'Unknown' end as demographic, 
+ 		transactions,sales,
+		round(sales/transactions,2) as avg_transaction
+		from data_mart.weekly_sales;
+
+	select * from clean_weekly_sales;
+
+
+**1. What day of the week is used for each week_date value?**
+
+
+	select TO_CHAR(week_date, 'Day') AS week_day from data_mart.clean_weekly_sales;
+
+***2. What range of week numbers are missing from the dataset?**
+
+	WITH week_sequence AS (
+    		SELECT generate_series(MIN(week_number), MAX(week_number)) AS week_number
+    		FROM data_mart.clean_weekly_sales
+		)
+	SELECT ws.week_number
+		FROM week_sequence ws
+	LEFT JOIN data_mart.clean_weekly_sales w ON ws.week_number = w.week_number
+	WHERE w.week_number IS NULL
+	ORDER BY ws.week_number;
+
+
+***3. How many total transactions were there for each year in the dataset?**
+
+
+ 	WITH trans_count AS (
+    		SELECT calender_year AS year,
+  			COUNT(transactions) AS transaction_count
+    			FROM data_mart.clean_weekly_sales 
+  			GROUP BY calender_year
+  			ORDER BY calender_year
+		)
+	SELECT * FROM trans_count;
+
+***4. What is the total sales for each region for each month?**
+
+	WITH total_sales AS (
+    		SELECT TO_CHAR(week_date, 'Month') AS month,
+  			region AS region,
+  			SUM(sales) AS total_sales
+    		FROM data_mart.clean_weekly_sales 
+  		GROUP BY TO_CHAR(week_date, 'Month'), region
+  		ORDER BY TO_CHAR(week_date, 'Month')
+		)
+	SELECT * FROM total_sales;
