@@ -113,3 +113,77 @@ Generate a new avg_transaction column as the sales value divided by transactions
   		ORDER BY TO_CHAR(week_date, 'Month')
 		)
 	SELECT * FROM total_sales;
+
+ ***5. What is the total count of transactions for each platform?**
+
+ 	WITH transaction AS (
+    	SELECT 
+	  	platform AS platform,
+	  	count(sales) AS count_of_transaction
+    	FROM data_mart.clean_weekly_sales 
+  	GROUP BY platform
+	)
+	SELECT * FROM transaction;
+
+ ***6.What is the percentage of sales for Retail vs Shopify for each month?**
+
+ 	WITH transaction AS (
+    		SELECT calender_year AS year, TO_char(week_date, 'MONTH') AS month,
+  			SUM(CASE WHEN platform = 'Retail' THEN sales END) AS retail_sales,
+  			SUM(CASE WHEN platform = 'Shopify' THEN sales END) AS shopify_sales,
+  			SUM(sales) AS total_sales
+    		FROM data_mart.clean_weekly_sales 
+  		GROUP BY calender_year, TO_char(week_date, 'MONTH') 
+		)
+	SELECT year, month,
+		retail_sales*100/total_sales AS retail_percent,
+		shopify_sales*100/total_sales AS shopify_percent
+	FROM transaction;
+
+
+***7. What is the percentage of sales by demographic for each year in the dataset?**
+
+
+	WITH demographic_sales AS (
+    		SELECT calender_year AS year, 
+ 			demographic,
+  			SUM(sales) AS total_demo_sales
+    		FROM data_mart.clean_weekly_sales 
+  		GROUP BY calender_year, demographic
+		),
+	total_yearly_sales AS(
+  		SELECT calender_year AS year, 
+  			SUM(sales) AS total_sales
+    		FROM data_mart.clean_weekly_sales 
+		GROUP BY calender_year)
+  
+	SELECT d.year, d.demographic,
+		d.total_demo_sales*100/t.total_sales AS sales_percent
+	FROM demographic_sales d
+	JOIN total_yearly_sales t
+	ON d.year=t.year
+	ORDER BY d.year;
+
+ ![image](https://github.com/user-attachments/assets/90fed1d8-7bae-45d9-86eb-5a2ff98e74fa)
+
+
+ ***8. Which age_band and demographic values contribute the most to Retail sales?**
+
+ 	WITH demo_age_sales AS (
+   		 SELECT
+ 			age_band, demographic,
+  			SUM(sales) AS total_demo_sales
+    		FROM data_mart.clean_weekly_sales 
+  		WHERE platform = 'Retail'
+  		GROUP BY age_band, demographic
+  		order by SUM(sales) 
+		)
+  
+	SELECT * FROM demo_age_sales LIMIT 1
+
+ ![image](https://github.com/user-attachments/assets/711e5de7-863b-450d-8f20-8e8b56594933)
+
+
+ ***9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
+
+ 
