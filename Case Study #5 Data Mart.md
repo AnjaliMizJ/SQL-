@@ -1,6 +1,6 @@
 **DATA MART**
 
-***Case Study Questions**
+**Case Study Questions**
 The following case study questions require some data cleaning steps before we start to unpack Danny’s key business questions in more depth.
 
 **1. Data Cleansing Steps**
@@ -77,7 +77,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 	select TO_CHAR(week_date, 'Day') AS week_day from data_mart.clean_weekly_sales;
 
-***2. What range of week numbers are missing from the dataset?**
+**2. What range of week numbers are missing from the dataset?**
 
 	WITH week_sequence AS (
     		SELECT generate_series(MIN(week_number), MAX(week_number)) AS week_number
@@ -90,7 +90,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 	ORDER BY ws.week_number;
 
 
-***3. How many total transactions were there for each year in the dataset?**
+**3. How many total transactions were there for each year in the dataset?**
 
 
  	WITH trans_count AS (
@@ -102,7 +102,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 		)
 	SELECT * FROM trans_count;
 
-***4. What is the total sales for each region for each month?**
+**4. What is the total sales for each region for each month?**
 
 	WITH total_sales AS (
     		SELECT TO_CHAR(week_date, 'Month') AS month,
@@ -114,7 +114,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 		)
 	SELECT * FROM total_sales;
 
- ***5. What is the total count of transactions for each platform?**
+ **5. What is the total count of transactions for each platform?**
 
  	WITH transaction AS (
     	SELECT 
@@ -125,7 +125,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 	)
 	SELECT * FROM transaction;
 
- ***6.What is the percentage of sales for Retail vs Shopify for each month?**
+ **6.What is the percentage of sales for Retail vs Shopify for each month?**
 
  	WITH transaction AS (
     		SELECT calender_year AS year, TO_char(week_date, 'MONTH') AS month,
@@ -141,7 +141,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 	FROM transaction;
 
 
-***7. What is the percentage of sales by demographic for each year in the dataset?**
+**7. What is the percentage of sales by demographic for each year in the dataset?**
 
 
 	WITH demographic_sales AS (
@@ -167,7 +167,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
  ![image](https://github.com/user-attachments/assets/90fed1d8-7bae-45d9-86eb-5a2ff98e74fa)
 
 
- ***8. Which age_band and demographic values contribute the most to Retail sales?**
+ **8. Which age_band and demographic values contribute the most to Retail sales?**
 
  	WITH demo_age_sales AS (
    		 SELECT
@@ -184,6 +184,6 @@ Generate a new avg_transaction column as the sales value divided by transactions
  ![image](https://github.com/user-attachments/assets/711e5de7-863b-450d-8f20-8e8b56594933)
 
 
- ***9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
+ **9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
 
  
