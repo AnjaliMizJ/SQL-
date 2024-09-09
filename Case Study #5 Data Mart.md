@@ -201,7 +201,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 		FROM avg_sales ;
 
 
- 		![image](https://github.com/user-attachments/assets/fee1e5aa-8a7f-4e10-9ad7-bbd7712441f1)
+ ![image](https://github.com/user-attachments/assets/fee1e5aa-8a7f-4e10-9ad7-bbd7712441f1)
 
 
  
