@@ -186,4 +186,22 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
  **9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?**
 
+	 WITH avg_sales AS (
+    			SELECT calender_year AS year, 
+ 				SUM(CASE WHEN platform = 'Retail' THEN sales ELSE 0 END) /
+  	SUM(CASE WHEN platform = 'Retail' THEN transactions ELSE 0 END ) AS Retail,
+  	SUM(CASE WHEN platform = 'Shopify' THEN sales ELSE 0 END) /
+  	SUM(CASE WHEN platform = 'Shopify' THEN transactions ELSE 0 END ) AS Shopify
+    			FROM data_mart.clean_weekly_sales 
+  			GROUP BY calender_year
+ 			ORDER BY calender_year
+			)
+  
+		SELECT year,retail, shopify
+		FROM avg_sales ;
+
+
+ 		![image](https://github.com/user-attachments/assets/fee1e5aa-8a7f-4e10-9ad7-bbd7712441f1)
+
+
  
