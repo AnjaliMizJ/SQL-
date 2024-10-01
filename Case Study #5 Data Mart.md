@@ -72,7 +72,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 	select * from clean_weekly_sales;
 
 
-**1. What day of the week is used for each week_date value?**
+<h4 align=left>1. What day of the week is used for each week_date value?</h4>
 
 
 	select TO_CHAR(week_date, 'Day') AS week_day from data_mart.clean_weekly_sales;
@@ -80,7 +80,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
  ![image](https://github.com/user-attachments/assets/8fa786d3-52b7-4958-92ab-bc33cbdc63b6)
 
 
-**2. What range of week numbers are missing from the dataset?**
+<h4 align=left>2. What range of week numbers are missing from the dataset?</h4>
 
 	WITH week_sequence AS (
     		SELECT generate_series(MIN(week_number), MAX(week_number)) AS week_number
@@ -99,7 +99,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 
 
-**3. How many total transactions were there for each year in the dataset?**
+<h4 align=left>3. How many total transactions were there for each year in the dataset?</h4>
 
 
  	WITH trans_count AS (
@@ -114,7 +114,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 ![image](https://github.com/user-attachments/assets/e6d24c00-c20a-43eb-b302-d001d4ce3f75)
 
 
-**4. What is the total sales for each region for each month?**
+<h4 align=left>4. What is the total sales for each region for each month?</h4>
 
 	WITH total_sales AS (
     		SELECT TO_CHAR(week_date, 'Month') AS month,
@@ -130,7 +130,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
  
 
 
- **5. What is the total count of transactions for each platform?**
+ <h4 align=left>5. What is the total count of transactions for each platform?</h4>
 
  	WITH transaction AS (
     	SELECT 
@@ -145,7 +145,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 
 
- **6.What is the percentage of sales for Retail vs Shopify for each month?**
+ <h4 align=left>6.What is the percentage of sales for Retail vs Shopify for each month?</h4>
 
  	WITH transaction AS (
     		SELECT calender_year AS year, TO_char(week_date, 'MONTH') AS month,
@@ -164,7 +164,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 
 
-**7. What is the percentage of sales by demographic for each year in the dataset?**
+<h4 align=left>7. What is the percentage of sales by demographic for each year in the dataset?</h4>
 
 
 	WITH demographic_sales AS (
@@ -190,7 +190,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
  ![image](https://github.com/user-attachments/assets/90fed1d8-7bae-45d9-86eb-5a2ff98e74fa)
 
 
- **8. Which age_band and demographic values contribute the most to Retail sales?**
+ <h4 align=left>8. Which age_band and demographic values contribute the most to Retail sales?</h4>
 
  	WITH demo_age_sales AS (
    		 SELECT
@@ -227,7 +227,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
  ![image](https://github.com/user-attachments/assets/fee1e5aa-8a7f-4e10-9ad7-bbd7712441f1)
 
 
- *****3. Before & After Analysis******
+ <h2 align=center>3. Before & After Analysis</h2>
 
  This technique is usually used when we inspect an important event and want to inspect the impact before and after a certain point in time.
 
@@ -237,7 +237,7 @@ We would include all week_date values for 2020-06-15 as the start of the period 
 
 Using this analysis approach - answer the following questions:
 
-**What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?**
+<h4 align=left>1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?</h4>
 
 
  
