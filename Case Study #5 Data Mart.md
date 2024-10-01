@@ -207,7 +207,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
  ![image](https://github.com/user-attachments/assets/711e5de7-863b-450d-8f20-8e8b56594933)
 
 
- <h3 align =left >9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?</h3>
+ <h4 align =left >9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?</h4>
 
 	 WITH avg_sales AS (
     			SELECT calender_year AS year, 
