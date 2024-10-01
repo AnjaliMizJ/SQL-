@@ -77,6 +77,9 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 	select TO_CHAR(week_date, 'Day') AS week_day from data_mart.clean_weekly_sales;
 
+ 	![image](https://github.com/user-attachments/assets/8fa786d3-52b7-4958-92ab-bc33cbdc63b6)
+
+
 **2. What range of week numbers are missing from the dataset?**
 
 	WITH week_sequence AS (
@@ -88,6 +91,12 @@ Generate a new avg_transaction column as the sales value divided by transactions
 	LEFT JOIN data_mart.clean_weekly_sales w ON ws.week_number = w.week_number
 	WHERE w.week_number IS NULL
 	ORDER BY ws.week_number;
+
+ ![image](https://github.com/user-attachments/assets/39356715-9b40-4604-976e-013181ce4858)
+
+ .
+ ..continued.
+
 
 
 **3. How many total transactions were there for each year in the dataset?**
@@ -101,6 +110,9 @@ Generate a new avg_transaction column as the sales value divided by transactions
   			ORDER BY calender_year
 		)
 	SELECT * FROM trans_count;
+ 
+![image](https://github.com/user-attachments/assets/e6d24c00-c20a-43eb-b302-d001d4ce3f75)
+
 
 **4. What is the total sales for each region for each month?**
 
@@ -114,6 +126,10 @@ Generate a new avg_transaction column as the sales value divided by transactions
 		)
 	SELECT * FROM total_sales;
 
+ ![image](https://github.com/user-attachments/assets/65a43321-9654-4da5-9b3a-2d3e0919b223)
+ 
+
+
  **5. What is the total count of transactions for each platform?**
 
  	WITH transaction AS (
@@ -124,6 +140,10 @@ Generate a new avg_transaction column as the sales value divided by transactions
   	GROUP BY platform
 	)
 	SELECT * FROM transaction;
+
+ ![image](https://github.com/user-attachments/assets/8bde809e-9cd6-402f-9e41-6681c1f11870)
+
+
 
  **6.What is the percentage of sales for Retail vs Shopify for each month?**
 
@@ -139,6 +159,9 @@ Generate a new avg_transaction column as the sales value divided by transactions
 		retail_sales*100/total_sales AS retail_percent,
 		shopify_sales*100/total_sales AS shopify_percent
 	FROM transaction;
+
+ ![image](https://github.com/user-attachments/assets/b2f23b67-5f11-4763-a421-dfde4858589b)
+
 
 
 **7. What is the percentage of sales by demographic for each year in the dataset?**
