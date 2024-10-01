@@ -226,8 +226,10 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
  ![image](https://github.com/user-attachments/assets/fee1e5aa-8a7f-4e10-9ad7-bbd7712441f1)
 
+ 
 
  <h2 align=center>3. Before & After Analysis</h2>
+ <p>
 
  This technique is usually used when we inspect an important event and want to inspect the impact before and after a certain point in time.
 
@@ -235,7 +237,7 @@ Taking the week_date value of 2020-06-15 as the baseline week where the Data Mar
 
 We would include all week_date values for 2020-06-15 as the start of the period after the change and the previous week_date values would be before
 
-Using this analysis approach - answer the following questions:
+Using this analysis approach - answer the following questions:</p>
 
 <h4 align=left>1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?</h4>
 
