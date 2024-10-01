@@ -1,4 +1,4 @@
-**DATA MART**
+<h1 align="center">DATA MART</h1>
 
 **Case Study Questions**
 The following case study questions require some data cleaning steps before we start to unpack Danny’s key business questions in more depth.
@@ -77,7 +77,7 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 	select TO_CHAR(week_date, 'Day') AS week_day from data_mart.clean_weekly_sales;
 
- 	![image](https://github.com/user-attachments/assets/8fa786d3-52b7-4958-92ab-bc33cbdc63b6)
+ ![image](https://github.com/user-attachments/assets/8fa786d3-52b7-4958-92ab-bc33cbdc63b6)
 
 
 **2. What range of week numbers are missing from the dataset?**
@@ -225,6 +225,19 @@ Generate a new avg_transaction column as the sales value divided by transactions
 
 
  ![image](https://github.com/user-attachments/assets/fee1e5aa-8a7f-4e10-9ad7-bbd7712441f1)
+
+
+ *****3. Before & After Analysis******
+
+ This technique is usually used when we inspect an important event and want to inspect the impact before and after a certain point in time.
+
+Taking the week_date value of 2020-06-15 as the baseline week where the Data Mart sustainable packaging changes came into effect.
+
+We would include all week_date values for 2020-06-15 as the start of the period after the change and the previous week_date values would be before
+
+Using this analysis approach - answer the following questions:
+
+**What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?**
 
 
  
