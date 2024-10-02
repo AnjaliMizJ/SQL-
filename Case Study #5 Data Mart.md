@@ -239,7 +239,19 @@ We would include all week_date values for 2020-06-15 as the start of the period 
 
 Using this analysis approach - answer the following questions:</p>
 
-<h4 align=left>1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?</h4>
+<h4 align=left>1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?</h4>	
+
+		WITH transaction AS (
+    		SELECT
+  			SUM(CASE WHEN week_date BETWEEN (TO_DATE( '15/06/20','YY-MM-DD') - INTERVAL '4 WEEKS') AND TO_DATE( '15/06/20','YY-MM-DD') THEN sales 					END) AS beforeweek_sales,
+  			SUM(CASE WHEN week_date BETWEEN TO_DATE( '15/06/20','YY-MM-DD') AND (TO_DATE( '15/06/20','YY-MM-DD') + INTERVAL '4 WEEKS') THEN sales 					END) AS afterweek_sales,
+  			SUM(sales) AS total_sales
+    			FROM data_mart.clean_weekly_sales 
+					)
+		SELECT afterweek_sales, beforeweek_sales,
+    			afterweek_sales - beforeweek_sales AS actual_reduction_or_growth,
+				(afterweek_sales - beforeweek_sales)*100/total_sales AS percentage_reduction_or_growth
+			FROM transaction;
 
 
  
