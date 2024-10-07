@@ -253,5 +253,10 @@ Using this analysis approach - answer the following questions:</p>
 				(afterweek_sales - beforeweek_sales)*100/total_sales AS percentage_reduction_or_growth
 			FROM transaction;
 
+   ![image](https://github.com/user-attachments/assets/13637cbc-c6b1-40ac-912b-1f00e9e17312)
+
+   
+
+
 
  
